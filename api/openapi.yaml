@@ -1,0 +1,141 @@
+openapi: 3.0.0
+info:
+  title: XIS Prices API
+  description: API prices management
+  version: 1.0.0
+  contact:
+    name: XIS Team
+    email: support@xis.com
+
+servers:
+  - url: http://localhost:8080
+    description: Servidor local
+  - url: https://api.xis.com
+    description: Servidor de producción
+
+paths:
+  /api/v1/prices:
+    get:
+      operationId: getPrice
+      summary: Obtener precio de un producto
+      description: Recupera el precio actual de un producto por su ID
+      tags:
+        - Prices
+      parameters:
+        - $ref: '#/components/parameters/applicationDate'
+        - $ref: '#/components/parameters/productId'
+        - $ref: '#/components/parameters/brandId'
+      responses:
+        '200':
+          description: Price successfully response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Price'
+        '404':
+          description: Price not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  parameters:
+    applicationDate:
+      in: query
+      name: applicationDate
+      description: Date and time when the price should be applied
+      schema:
+        type: string
+        format: date-time
+        example: "2026-02-06T10:30:00Z"
+      required: true
+    productId:
+      in: query
+      name: productId
+      description: Unique identifier of the product
+      schema:
+        type: integer
+        format: int64
+        example: 35455
+      required: true
+    brandId:
+      in: query
+      name: brandId
+      description: Unique identifier of the brand
+      schema:
+        type: integer
+        format: int32
+        example: 1
+      required: true
+
+  schemas:
+    Price:
+      type: object
+      description: Price information for a product at a specific brand
+      required:
+        - productId
+        - brandId
+        - priceList
+        - startDate
+        - endDate
+        - price
+      properties:
+        productId:
+          type: integer
+          format: int64
+          description: Unique identifier of the product
+          example: 35455
+        brandId:
+          type: integer
+          format: int32
+          description: Unique identifier of the brand
+          example: 1
+        priceList:
+          type: integer
+          format: int64
+          description: Price list identifier
+          example: 1
+        startDate:
+          type: string
+          format: date-time
+          description: Start date and time when the price is effective
+          example: "2026-02-06T00:00:00Z"
+        endDate:
+          type: string
+          format: date-time
+          description: End date and time when the price expires
+          example: "2026-12-31T23:59:59Z"
+        price:
+          type: number
+          format: double
+          description: The price value
+          example: 99.99
+
+    Error:
+      type: object
+      description: Error response object containing error details
+      required:
+        - message
+        - path
+        - date
+      properties:
+        message:
+          type: string
+          description: Error message describing what went wrong
+          example: "Price not found for the given parameters"
+        path:
+          type: string
+          description: API endpoint path where the error occurred
+          example: "/api/v1/prices"
+        date:
+          type: string
+          format: date-time
+          description: Timestamp when the error occurred
+          example: "2026-02-06T10:30:00Z"
