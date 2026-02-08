@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.xis</groupId>
         <artifactId>prices-api</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
 
     <artifactId>xis-prices-api-server</artifactId>
@@ -51,7 +51,7 @@
                             <inputSpec>${project.basedir}/../api/openapi.yaml</inputSpec>
                             <generatorName>spring</generatorName>
                             <apiPackage>com.xis.prices.api</apiPackage>
-                            <modelPackage>com.xis.prices.model</modelPackage>
+                            <modelPackage>com.xis.prices.api.model</modelPackage>
                             <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
                             <configOptions>
                                 <useSpringBoot3>true</useSpringBoot3>
